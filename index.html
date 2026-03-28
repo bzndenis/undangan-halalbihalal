@@ -13,15 +13,11 @@
     <!-- Alpine/Vue Alternative -> Vue 3 CDN -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- AOS CSS & JS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Tailwind CSS CDN -->
+    <script data-cfasync="false" src="https://cdn.tailwindcss.com"></script>
     
     <!-- Tailwind Config -->
-    <script>
+    <script data-cfasync="false">
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -64,59 +60,13 @@
             }
         }
     </script>
-
-    <style>
-        body {
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .bg-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2.5L22.5 11 25 13.5V16h20v2H25v2.5L22.5 23 20 20.5zM0 38h20v-2.5L22.5 33l2.5 2.5V38h15v2H25v-2.5L22.5 35l-2.5 2.5V40H0v-2zm0-20h20v-2.5L22.5 13l2.5 2.5V18h15v2H25v-2.5L22.5 15l-2.5 2.5V20H0v-2z' fill='%2322c55e' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-        }
-        .dark .bg-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2.5L22.5 11 25 13.5V16h20v2H25v2.5L22.5 23 20 20.5zM0 38h20v-2.5L22.5 33l2.5 2.5V38h15v2H25v-2.5L22.5 35l-2.5 2.5V40H0v-2zm0-20h20v-2.5L22.5 13l2.5 2.5V18h15v2H25v-2.5L22.5 15l-2.5 2.5V20H0v-2z' fill='%2316a34a' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        .dark .glass-card {
-            background: rgba(17, 24, 39, 0.7);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .dark ::-webkit-scrollbar-track {
-            background: #1f2937;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background: #4b5563;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #22c55e;
-        }
-        
-        .cover-overlay {
-            clip-path: circle(150% at 50% 50%);
-            transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        .cover-overlay.open {
-            clip-path: circle(0% at 50% -20%);
-        }
-    </style>
+    
+    <!-- AOS CSS & JS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./style.css?v=2">
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased overflow-x-hidden transition-colors duration-300">
     <div id="app" :class="{'dark': isDark}" class="w-full h-full min-h-screen">
@@ -297,151 +247,6 @@
     </div>
 
     <!-- Application Script -->
-    <script>
-        const { createApp, ref, reactive, onMounted, computed, onUnmounted } = Vue;
-
-        createApp({
-            setup() {
-                const isLoading = ref(true);
-                const isOpened = ref(false);
-                const isDark = ref(false);
-                const isPlaying = ref(false);
-                const bgm = ref(null);
-                const scrollProgress = ref(0);
-                
-                // Countdown logic (Target: 11 April 2026, 10:00:00 WIB)
-                // +07:00 for WIB
-                const targetDate = new Date("2026-04-11T10:00:00+07:00").getTime();
-                let timer = null;
-                const countdown = reactive({
-                    days: '00',
-                    hours: '00',
-                    minutes: '00',
-                    seconds: '00'
-                });
-
-                const formatTime = (time) => String(Math.max(0, time)).padStart(2, '0');
-
-                const updateCountdown = () => {
-                    const now = new Date().getTime();
-                    const distance = targetDate - now;
-
-                    if (distance < 0) {
-                        clearInterval(timer);
-                        return;
-                    }
-
-                    countdown.days = formatTime(Math.floor(distance / (1000 * 60 * 60 * 24)));
-                    countdown.hours = formatTime(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-                    countdown.minutes = formatTime(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-                    countdown.seconds = formatTime(Math.floor((distance % (1000 * 60)) / 1000));
-                };
-
-                // Scroll Progress
-                const handleScroll = () => {
-                    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-                    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                    scrollProgress.value = (winScroll / height) * 100;
-                };
-
-                // Theme Management
-                const toggleDarkMode = () => {
-                    isDark.value = !isDark.value;
-                    localStorage.setItem('theme', isDark.value ? 'dark' : 'light');
-                };
-
-                // Music Management
-                const toggleMusic = () => {
-                    if (!bgm.value) return;
-                    
-                    if (isPlaying.value) {
-                        bgm.value.pause();
-                        isPlaying.value = false;
-                    } else {
-                        const playPromise = bgm.value.play();
-                        if (playPromise !== undefined) {
-                            playPromise.then(() => {
-                                isPlaying.value = true;
-                            }).catch(error => {
-                                isPlaying.value = false;
-                                console.log("Audio playback was aborted or failed:", error);
-                            });
-                        } else {
-                            isPlaying.value = true;
-                        }
-                    }
-                };
-
-                const openInvitation = () => {
-                    isOpened.value = true;
-                    // Trigger AOS refresh after layout changes
-                    setTimeout(() => AOS.refresh(), 100);
-                    
-                    // Auto play music when opened if not already playing
-                    if (!isPlaying.value && bgm.value) {
-                        const playPromise = bgm.value.play();
-                        if (playPromise !== undefined) {
-                            playPromise.then(() => {
-                                isPlaying.value = true;
-                            }).catch(e => {
-                                isPlaying.value = false;
-                                console.log("Auto-play prevented by browser:", e);
-                            });
-                        } else {
-                            isPlaying.value = true;
-                        }
-                    }
-                };
-
-                onMounted(() => {
-                    // Initialize theme
-                    const savedTheme = localStorage.getItem('theme');
-                    if (savedTheme) {
-                        isDark.value = savedTheme === 'dark';
-                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                        isDark.value = true;
-                    }
-
-                    // Remove loading screen after a short delay
-                    setTimeout(() => {
-                        isLoading.value = false;
-                        
-                        // Wait a bit before initializing AOS to avoid animation glitches
-                        setTimeout(() => {
-                            AOS.init({
-                                once: true,
-                                offset: 50,
-                            });
-                        }, 100);
-                    }, 1500);
-
-                    // Setup countdown
-                    updateCountdown();
-                    timer = setInterval(updateCountdown, 1000);
-
-                    // Setup scroll listener
-                    window.addEventListener('scroll', handleScroll);
-                });
-
-                onUnmounted(() => {
-                    if (timer) clearInterval(timer);
-                    window.removeEventListener('scroll', handleScroll);
-                });
-
-                return {
-                    isLoading,
-                    isOpened,
-                    isDark,
-                    isPlaying,
-                    countdown,
-                    bgm,
-                    scrollProgress,
-                    toggleDarkMode,
-                    toggleMusic,
-                    openInvitation
-                }
-            }
-        }).mount('#app')
-    </script>
+    <script src="./script.js?v=2"></script>
 </body>
 </html>

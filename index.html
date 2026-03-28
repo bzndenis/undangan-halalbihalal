@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Halal Bi Halal - Silaturahmi</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Alpine/Vue Alternative -> Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- AOS CSS & JS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        accent: {
+                            500: '#d97706',
+                            600: '#b45309',
+                        }
+                    },
+                    animation: {
+                        'float': 'floating 3s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'scale-fade': 'scaleFade 1.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        floating: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        scaleFade: {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2.5L22.5 11 25 13.5V16h20v2H25v2.5L22.5 23 20 20.5zM0 38h20v-2.5L22.5 33l2.5 2.5V38h15v2H25v-2.5L22.5 35l-2.5 2.5V40H0v-2zm0-20h20v-2.5L22.5 13l2.5 2.5V18h15v2H25v-2.5L22.5 15l-2.5 2.5V20H0v-2z' fill='%2322c55e' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .dark .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2.5L22.5 11 25 13.5V16h20v2H25v2.5L22.5 23 20 20.5zM0 38h20v-2.5L22.5 33l2.5 2.5V38h15v2H25v-2.5L22.5 35l-2.5 2.5V40H0v-2zm0-20h20v-2.5L22.5 13l2.5 2.5V18h15v2H25v-2.5L22.5 15l-2.5 2.5V20H0v-2z' fill='%2316a34a' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #22c55e;
+        }
+        
+        .cover-overlay {
+            clip-path: circle(150% at 50% 50%);
+            transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .cover-overlay.open {
+            clip-path: circle(0% at 50% -20%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased overflow-x-hidden transition-colors duration-300">
+    <div id="app" :class="{'dark': isDark}" class="w-full h-full min-h-screen">
+        <div class="h-full w-full bg-gray-50 dark:bg-gray-900 transition-colors duration-300 bg-pattern min-h-screen relative">
+            
+            <!-- Loading Screen -->
+            <Transition enter-active-class="transition duration-500" leave-active-class="transition duration-500 ease-in" enter-from-class="opacity-0" leave-to-class="opacity-0">
+                <div v-show="isLoading" class="fixed inset-0 z-[100] flex items-center justify-center bg-brand-50 dark:bg-gray-900">
+                    <div class="flex flex-col items-center">
+                        <svg class="animate-spin h-10 w-10 text-brand-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <p class="text-sm text-brand-700 dark:text-brand-400 font-medium">Memuat Undangan...</p>
+                    </div>
+                </div>
+            </Transition>
+
+            <!-- Floating Controls -->
+            <div class="fixed top-4 right-4 z-40 flex flex-col gap-3" v-show="!isLoading && isOpened">
+                <button @click="toggleDarkMode" class="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg text-gray-700 dark:text-yellow-400 hover:scale-110 transition-transform">
+                    <svg v-if="!isDark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </button>
+                <button @click="toggleMusic" class="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg text-brand-600 dark:text-brand-400 hover:scale-110 transition-transform">
+                    <svg v-if="isPlaying" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>
+                </button>
+                <audio ref="bgm" loop preload="auto">
+                    <!-- Audio source sample -->
+                    <source src="https://cdn.pixabay.com/audio/2026/02/24/audio_c475fa89f9.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div v-show="!isLoading && isOpened" class="fixed bottom-0 left-0 w-full h-1 z-40 bg-gray-200 dark:bg-gray-700">
+                <div class="h-full bg-brand-500 rounded-r transition-all duration-100 ease-out" :style="{ width: scrollProgress + '%' }"></div>
+            </div>
+
+            <!-- Cover / Hero Overlay -->
+            <div :class="['cover-overlay fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-brand-50 to-brand-100 dark:from-gray-900 dark:to-brand-900 bg-pattern text-center px-4', isOpened ? 'open pointer-events-none' : '']" v-show="!isLoading">
+                
+                <div class="max-w-md w-full glass-card rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -top-16 -left-16 w-32 h-32 bg-brand-200 dark:bg-brand-800 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-float"></div>
+                    <div class="absolute -bottom-16 -right-16 w-32 h-32 bg-accent-200 dark:bg-accent-700 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-float" style="animation-delay: 1s;"></div>
+                    
+                    <div class="relative z-10 animate-scale-fade">
+                        <img src="https://img.freepik.com/vektor-gratis/perayaan-muslim-idul-fitri_24911-115614.jpg?semt=ais_hybrid&w=740&q=80" alt="Logo Idul Fitri" class="w-24 h-24 mx-auto mb-6 object-cover rounded-full shadow-md border-2 border-brand-100 dark:border-gray-700">
+
+                        <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2 font-medium">Bismillah</p>
+                        <h1 class="text-3xl md:text-5xl font-serif font-bold text-gray-800 dark:text-white mb-2">Halal Bi Halal</h1>
+                        <h2 class="text-xl md:text-3xl font-serif text-brand-600 dark:text-brand-400 font-semibold mb-4">Keluarga Besar Aki Ayum</h2>
+                        <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-serif italic mb-8">Mempererat Tali Silaturahmi</p>
+                        
+                        <div class="mt-8">
+                            <button @click="openInvitation" class="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-white bg-brand-600 hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600 rounded-full overflow-hidden transition-all duration-300 shadow-xl hover:shadow-brand-500/30 hover:-translate-y-1">
+                                <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                                <span class="relative flex items-center gap-2">
+                                    <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"></path></svg>
+                                    Buka Undangan
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Container -->
+            <main v-if="!isLoading" class="min-h-screen text-gray-800 dark:text-gray-200 transition-opacity duration-1000 delay-500 pb-20 relative overflow-hidden" :class="isOpened ? 'opacity-100' : 'opacity-0'">
+                
+                <!-- Floating Lanterns -->
+                <div class="absolute top-10 left-4 md:left-20 w-12 h-20 opacity-30 animate-float" style="animation-delay: 0s;">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-brand-600 dark:text-yellow-500"><path d="M12 2L9 5h6l-3-3zm5 4H7v2h10V6zm-8 3H7v8h2V9zm6 0h-2v8h2V9zm3 0h-2v8h2V9zM7 18v2h10v-2H7zm5 3l-3 3h6l-3-3z"/></svg>
+                </div>
+                <div class="absolute top-32 right-4 md:right-20 w-16 h-24 opacity-20 animate-float" style="animation-delay: 1.5s;">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-accent-500 dark:text-yellow-600"><path d="M12 2L9 5h6l-3-3zm5 4H7v2h10V6zm-8 3H7v8h2V9zm6 0h-2v8h2V9zm3 0h-2v8h2V9zM7 18v2h10v-2H7zm5 3l-3 3h6l-3-3z"/></svg>
+                </div>
+
+                <!-- Section: Greeting -->
+                <section class="max-w-4xl mx-auto px-4 pt-32 pb-16 text-center">
+                    <div data-aos="fade-up" data-aos-duration="1000" class="glass-card rounded-3xl p-8 md:p-12 shadow-lg border border-brand-100 dark:border-gray-700 relative">
+                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center text-brand-600 dark:text-brand-400 shadow-md border border-gray-100 dark:border-gray-700">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        </div>
+                        <h2 class="text-2xl md:text-4xl font-serif font-bold text-gray-800 dark:text-white mt-4 mb-6">Assalamu'alaikum Warahmatullahi Wabarakatuh</h2>
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg md:text-xl font-light">
+                            "Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara Halal Bi Halal Keluarga Besar Aki Ayum. Mari bersama-sama kita merajut ukhuwah dan saling memaafkan di hari yang fitri."
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Section: Countdown Timer -->
+                <section id="countdown-section" class="max-w-4xl mx-auto px-4 py-8 relative">
+                    <div data-aos="zoom-in" data-aos-duration="1000" class="bg-brand-600 dark:bg-brand-800 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black opacity-10 bg-pattern mix-blend-overlay"></div>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-serif font-semibold text-center mb-8">Menuju Hari Acara</h3>
+                            
+                            <div class="grid grid-cols-4 gap-2 md:gap-6 text-center max-w-2xl mx-auto">
+                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl py-4 flex flex-col items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-bold mb-1">{{ countdown.days }}</span>
+                                    <span class="text-xs md:text-sm uppercase tracking-wider font-medium">Hari</span>
+                                </div>
+                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl py-4 flex flex-col items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-bold mb-1">{{ countdown.hours }}</span>
+                                    <span class="text-xs md:text-sm uppercase tracking-wider font-medium">Jam</span>
+                                </div>
+                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl py-4 flex flex-col items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-bold mb-1">{{ countdown.minutes }}</span>
+                                    <span class="text-xs md:text-sm uppercase tracking-wider font-medium">Menit</span>
+                                </div>
+                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl py-4 flex flex-col items-center justify-center">
+                                    <span class="text-3xl md:text-5xl font-bold mb-1">{{ countdown.seconds }}</span>
+                                    <span class="text-xs md:text-sm uppercase tracking-wider font-medium">Detik</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section: Event Details -->
+                <section class="max-w-4xl mx-auto px-4 py-16">
+                    <div class="text-center mb-12" data-aos="fade-up">
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-800 dark:text-white mb-4">Informasi Acara</h2>
+                        <div class="w-24 h-1 bg-brand-500 mx-auto rounded-full"></div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Date & Time Card -->
+                        <div data-aos="fade-right" class="glass-card rounded-3xl p-8 shadow-lg text-center hover:-translate-y-2 transition-transform duration-300">
+                            <div class="w-16 h-16 mx-auto bg-brand-50 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6 text-brand-600 dark:text-brand-400">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Tanggal & Waktu</h3>
+                            <p class="text-2xl font-serif text-brand-700 dark:text-brand-400 mb-2">11 April 2026</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-lg">Pukul 10.00 WIB - Selesai</p>
+                        </div>
+
+                        <!-- Location Card -->
+                        <div data-aos="fade-left" class="glass-card rounded-3xl p-8 shadow-lg text-center hover:-translate-y-2 transition-transform duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="w-16 h-16 mx-auto bg-accent-50 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6 text-accent-600 dark:text-accent-400">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </div>
+                                <h3 class="text-xl font-bold mb-2">Tempat Acara</h3>
+                                <p class="font-semibold text-gray-800 dark:text-white mb-2">STIA Maulana Yusuf Banten</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">Jl. Trip Jamak Sari Cinanggung, Kel. Kaligandu, Kec. Serang</p>
+                            </div>
+                            
+                            <a href="https://maps.app.goo.gl/SkQk34J8QDrTSGMC9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-none w-full group">
+                                <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                                Lihat di Google Maps
+                                <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- Footer -->
+            <footer v-if="!isLoading" class="bg-gray-900 text-white pt-16 pb-8 px-4 text-center transition-opacity duration-1000 delay-500 relative" :class="isOpened ? 'opacity-100' : 'opacity-0'">
+                <div class="absolute inset-0 bg-black opacity-30 bg-pattern"></div>
+                <div class="relative z-10 max-w-4xl mx-auto">
+                    <img src="https://img.freepik.com/vektor-gratis/perayaan-muslim-idul-fitri_24911-115614.jpg?semt=ais_hybrid&w=740&q=80" alt="Logo Idul Fitri" class="w-16 h-16 mx-auto mb-6 object-cover rounded-full shadow-md">
+                    <p class="text-xl md:text-2xl font-serif italic mb-4">"Mari kita saling memaafkan dan kembali fitrah."</p>
+                    <p class="text-gray-400 mb-8 max-w-xl mx-auto font-light">
+                        Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir di acara kami.<br><br>
+                        <strong>Kami tunggu kehadirannya.</strong>
+                    </p>
+                    <div class="w-16 h-0.5 bg-gray-700 mx-auto mb-8"></div>
+                    <p class="text-sm text-gray-500">
+                        &copy; 2026 Undangan Halal Bi Halal. Dibuat dengan cinta.
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        const { createApp, ref, reactive, onMounted, computed, onUnmounted } = Vue;
+
+        createApp({
+            setup() {
+                const isLoading = ref(true);
+                const isOpened = ref(false);
+                const isDark = ref(false);
+                const isPlaying = ref(false);
+                const bgm = ref(null);
+                const scrollProgress = ref(0);
+                
+                // Countdown logic (Target: 11 April 2026, 10:00:00 WIB)
+                // +07:00 for WIB
+                const targetDate = new Date("2026-04-11T10:00:00+07:00").getTime();
+                let timer = null;
+                const countdown = reactive({
+                    days: '00',
+                    hours: '00',
+                    minutes: '00',
+                    seconds: '00'
+                });
+
+                const formatTime = (time) => String(Math.max(0, time)).padStart(2, '0');
+
+                const updateCountdown = () => {
+                    const now = new Date().getTime();
+                    const distance = targetDate - now;
+
+                    if (distance < 0) {
+                        clearInterval(timer);
+                        return;
+                    }
+
+                    countdown.days = formatTime(Math.floor(distance / (1000 * 60 * 60 * 24)));
+                    countdown.hours = formatTime(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+                    countdown.minutes = formatTime(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+                    countdown.seconds = formatTime(Math.floor((distance % (1000 * 60)) / 1000));
+                };
+
+                // Scroll Progress
+                const handleScroll = () => {
+                    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    scrollProgress.value = (winScroll / height) * 100;
+                };
+
+                // Theme Management
+                const toggleDarkMode = () => {
+                    isDark.value = !isDark.value;
+                    localStorage.setItem('theme', isDark.value ? 'dark' : 'light');
+                };
+
+                // Music Management
+                const toggleMusic = () => {
+                    if (!bgm.value) return;
+                    
+                    if (isPlaying.value) {
+                        bgm.value.pause();
+                        isPlaying.value = false;
+                    } else {
+                        const playPromise = bgm.value.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                isPlaying.value = true;
+                            }).catch(error => {
+                                isPlaying.value = false;
+                                console.log("Audio playback was aborted or failed:", error);
+                            });
+                        } else {
+                            isPlaying.value = true;
+                        }
+                    }
+                };
+
+                const openInvitation = () => {
+                    isOpened.value = true;
+                    // Trigger AOS refresh after layout changes
+                    setTimeout(() => AOS.refresh(), 100);
+                    
+                    // Auto play music when opened if not already playing
+                    if (!isPlaying.value && bgm.value) {
+                        const playPromise = bgm.value.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                isPlaying.value = true;
+                            }).catch(e => {
+                                isPlaying.value = false;
+                                console.log("Auto-play prevented by browser:", e);
+                            });
+                        } else {
+                            isPlaying.value = true;
+                        }
+                    }
+                };
+
+                onMounted(() => {
+                    // Initialize theme
+                    const savedTheme = localStorage.getItem('theme');
+                    if (savedTheme) {
+                        isDark.value = savedTheme === 'dark';
+                    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        isDark.value = true;
+                    }
+
+                    // Remove loading screen after a short delay
+                    setTimeout(() => {
+                        isLoading.value = false;
+                        
+                        // Wait a bit before initializing AOS to avoid animation glitches
+                        setTimeout(() => {
+                            AOS.init({
+                                once: true,
+                                offset: 50,
+                            });
+                        }, 100);
+                    }, 1500);
+
+                    // Setup countdown
+                    updateCountdown();
+                    timer = setInterval(updateCountdown, 1000);
+
+                    // Setup scroll listener
+                    window.addEventListener('scroll', handleScroll);
+                });
+
+                onUnmounted(() => {
+                    if (timer) clearInterval(timer);
+                    window.removeEventListener('scroll', handleScroll);
+                });
+
+                return {
+                    isLoading,
+                    isOpened,
+                    isDark,
+                    isPlaying,
+                    countdown,
+                    bgm,
+                    scrollProgress,
+                    toggleDarkMode,
+                    toggleMusic,
+                    openInvitation
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
